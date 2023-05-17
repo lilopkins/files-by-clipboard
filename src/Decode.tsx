@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 import md5 from 'md5'
+import { unzlibSync } from 'fflate'
 
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
   const binaryString = atob(base64)
@@ -17,26 +18,31 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
 
 function Decode() {
   const [input, setInput] = useState<string>('')
+  const [status, setStatus] = useState<string>('')
 
   const download = () => {
+    setStatus('Processing...')
     const sections = input.split(':')
     if (sections.length != 3) {
-      alert('Invalid encoded data! Please try again.')
+      setStatus('Invalid encoded data!')
       return
     }
 
     const fileName = sections[0]
-    const data = sections[1]
-    const calculatedChecksum = md5(data)
+    const base64Data = sections[1]
+    const calculatedChecksum = md5(base64Data)
     const checksum = sections[2]
 
     if (checksum !== calculatedChecksum) {
-      alert('Corrupted encoded data! Please try again.')
+      setStatus('Corrupted encoded data!')
       return
     }
 
-    const file = new File([base64ToArrayBuffer(data) as BlobPart], fileName)
+    const compressedBuffer = base64ToArrayBuffer(base64Data)
+    const buffer = unzlibSync(new Uint8Array(compressedBuffer))
+    const file = new File([buffer as BlobPart], fileName)
     window.open(URL.createObjectURL(file))
+    setStatus('')
   }
 
   return (
@@ -46,6 +52,7 @@ function Decode() {
         <Form.Control as='textarea' style={{ height: '200px' }} onChange={(e) => setInput(e.currentTarget.value)} />
       </FloatingLabel>
       <Button className='mt-2' variant='primary' onClick={download}>Download</Button>
+      <p>{status}&nbsp;</p>
     </Col>
   )
 }

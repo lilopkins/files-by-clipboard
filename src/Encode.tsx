@@ -6,6 +6,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Button from 'react-bootstrap/Button'
 
 import md5 from 'md5'
+import { zlibSync } from 'fflate'
 
 const NO_DATA = 'No file selected'
 const PROCESSING = 'Processing file...'
@@ -34,7 +35,8 @@ function Encode() {
 
     const file = files[0]
     const buffer = await file.arrayBuffer()
-    const b64encoded = arrayBufferToBase64(buffer)
+    const compressedBuffer = zlibSync(new Uint8Array(buffer), { level: 7 })
+    const b64encoded = arrayBufferToBase64(compressedBuffer)
     const checksum = md5(b64encoded)
     setEncodedData(`${file.name.replaceAll(':', '_')}:${b64encoded}:${checksum}`)
   }
