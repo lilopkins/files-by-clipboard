@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Button from 'react-bootstrap/Button'
 
+import md5 from 'md5'
+
 const NO_DATA = 'No file selected'
 const PROCESSING = 'Processing file...'
 
@@ -33,7 +35,8 @@ function Encode() {
     const file = files[0]
     const buffer = await file.arrayBuffer()
     const b64encoded = arrayBufferToBase64(buffer)
-    setEncodedData(`${file.name.replaceAll(':', '_')}:${b64encoded}:end`)
+    const checksum = md5(b64encoded)
+    setEncodedData(`${file.name.replaceAll(':', '_')}:${b64encoded}:${checksum}`)
   }
 
   const setFlash = (flash: string) => {
