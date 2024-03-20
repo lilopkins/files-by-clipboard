@@ -25,10 +25,10 @@ All of this processing is done in-browser.
 If you need to encode a file from a remote system via bash, you can run this one-liner:
 
 ```sh
-fbc () { if [ ! -f "$1" ]; then echo "$1: file not found!"; return; fi; B64="$(gzip -c "$1" | base64 -w0 -)"; echo "$(basename "$1"):$B64:$(echo -n "$B64" | md5sum - | awk '{ print $1; }')"; }; fbc FILENAME
+fbc () { if [ ! -f "$1" ]; then echo "$1: file not found!"; return; fi; B64="$(gzip -c "$1" | base64 -w0 -)"; echo "$(basename "$1"| tr : _):$B64:$(echo -n "$B64" | md5sum - | awk '{ print $1; }')"; }; fbc FILENAME
 ```
 
-This will build up the data that FbC uses with tools often available on *nix systems (it only needs `awk`, `basename`, `gzip` and `md5sum`!).
+This will build up the data that FbC uses with tools often available on *nix systems (it only needs `awk`, `basename`, `gzip`, `tr` and `md5sum`!).
 
 ## Available Scripts
 
