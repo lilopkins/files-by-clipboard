@@ -41,7 +41,15 @@ function Decode() {
     const compressedBuffer = base64ToArrayBuffer(base64Data)
     const buffer = gunzipSync(new Uint8Array(compressedBuffer))
     const file = new File([buffer as BlobPart], fileName)
-    window.open(URL.createObjectURL(file))
+    
+    // force download of blob
+    const link = document.createElement("a")
+    link.href = URL.createObjectURL(file)
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
     setStatus('')
   }
 
