@@ -29,7 +29,7 @@ function Decode() {
     }
 
     const fileName = sections[0]
-    const base64Data = sections[1]
+    const base64Data = sections[1].replaceAll('\r', '').replaceAll('\n', '')
     const calculatedChecksum = md5(base64Data)
     const checksum = sections[2]
 
