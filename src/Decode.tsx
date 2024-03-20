@@ -43,7 +43,7 @@ function Decode() {
     const file = new File([buffer as BlobPart], fileName)
     
     // force download of blob
-    const link = document.createElement("a")
+    const link = document.createElement('a')
     link.href = URL.createObjectURL(file)
     link.download = fileName
     document.body.appendChild(link)
