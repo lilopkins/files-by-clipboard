@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 import md5 from 'md5'
-import { unzlibSync } from 'fflate'
+import { ungzipSync } from 'fflate'
 
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
   const binaryString = atob(base64)
@@ -39,7 +39,7 @@ function Decode() {
     }
 
     const compressedBuffer = base64ToArrayBuffer(base64Data)
-    const buffer = unzlibSync(new Uint8Array(compressedBuffer))
+    const buffer = ungzipSync(new Uint8Array(compressedBuffer))
     const file = new File([buffer as BlobPart], fileName)
     window.open(URL.createObjectURL(file))
     setStatus('')

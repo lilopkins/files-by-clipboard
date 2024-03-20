@@ -8,14 +8,14 @@ To encode, the following process is used:
 
 ```mermaid
 graph TD
-  Data --> cd["Compressed Data (zlib)"] --> b64[Base64 String with Checksum];
+  Data --> cd["Compressed Data (gzip)"] --> b64[Base64 String with Checksum];
 ```
 
 To decode, the reverse process is used:
 
 ```mermaid
 graph TD
-  b64[Base64 String with Checksum] --> cd["Compressed Data (zlib)"] --> Data;
+  b64[Base64 String with Checksum] --> cd["Compressed Data (gzip)"] --> Data;
 ```
 
 All of this processing is done in-browser.
