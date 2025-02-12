@@ -29,7 +29,7 @@ function Decode() {
     }
 
     const fileName = sections[0]
-    const base64Data = sections[1].replaceAll('\r', '').replaceAll('\n', '')
+    const base64Data = sections[1].replaceAll('\r', '').replaceAll('\n', '').replaceAll('\t', '').replaceAll(' ', '')
     const calculatedChecksum = md5(base64Data)
     const checksum = sections[2]
 
@@ -41,7 +41,7 @@ function Decode() {
     const compressedBuffer = base64ToArrayBuffer(base64Data)
     const buffer = gunzipSync(new Uint8Array(compressedBuffer))
     const file = new File([buffer as BlobPart], fileName)
-    
+
     // force download of blob
     const link = document.createElement('a')
     link.href = URL.createObjectURL(file)
